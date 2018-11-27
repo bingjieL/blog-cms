@@ -1,0 +1,36 @@
+.login {
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/login_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  &-con{
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-60%);
+    width: 300px;
+    .form-con{
+        padding: 10px 0 0;
+    }
+    .login-tip{
+        font-size: 10px;
+        text-align: center;
+        color: #c3c3c3;
+    }
+    
+  }
+}
+.el-input-group__prepend {
+  padding: 0;
+  color: #49505F;
+}
+.el-card__header {
+  padding: 15px 15px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.el-card__body {
+  padding: 15px 20px;
+}
