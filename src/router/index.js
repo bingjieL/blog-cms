@@ -41,6 +41,30 @@ export default new Router({
         { path: '/music/edit', name: 'Music edit', hidden: true, title: 'Music Edit', component: () => import('@/views/music/musicEdit.vue') },
       ]
     },
+    {
+      path: '/blog',
+      title: 'Blog',
+      name: 'Blog',
+      icon: 'iconfont icon-huanyingqiapian',
+      component: Layout,
+      redirect: '/blog/list',
+      children: [
+        { path: '/blog/list', name: 'Blog list', title: 'Blog List', component: () => import('@/views/blog/blogList.vue') },
+        { path: '/blog/edit', name: 'Blog edit', hidden: true, title: 'Blog Edit', component: () => import('@/views/blog/blogEdit.vue') },
+      ]
+    },
+    {
+      path: '/setting',
+      title: 'Setting',
+      name: 'Setting',
+      icon: 'iconfont icon-huanyingqiapian',
+      component: Layout,
+      redirect: '/setting/blogTypeList',
+      children: [
+        { path: '/setting/blogTypeList', name: 'BlogType list', title: 'BlogType List', component: () => import('@/views/setting/blogType/blogTypeList.vue') },
+        { path: '/setting/blogTypeEdit', name: 'BlogType edit', hidden: true, title: 'BlogType Edit', component: () => import('@/views/setting/blogType/blogTypeEdit.vue') },
+      ]
+    },
     { 
       path: '/*',
       component: () => import('@/views/404.vue'),

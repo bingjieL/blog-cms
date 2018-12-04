@@ -73,6 +73,25 @@ export default {
             { path: '/music/list', name: 'Music list', title: 'Music List'},
           ]
         },
+        {
+          path: '/blog',
+          title: 'Blog',
+          name: 'Blog',
+          icon: 'iconfont icon-huanyingqiapian',
+          children: [
+            { path: '/blog/list', name: 'Blog list', title: 'Blog List'},
+          ]
+        },
+        {
+          path: '/setting',
+          title: 'Setting',
+          name: 'Setting',
+          icon: 'iconfont icon-mzicon-setting',
+          children: [
+            { path: '/setting/blogTypeList', name: 'BlogType list', title: 'BlogType List'},
+            { hidden: true }
+          ]
+        },
       ],
       nav: {
         width: '250px',
@@ -137,8 +156,8 @@ export default {
               font-weight:400;
           }
           .el-button{
-            height: 40px;
-            margin-top: 10px;
+            height: 36px;
+            margin-top: 12px;
           }
         }
       }

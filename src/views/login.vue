@@ -47,6 +47,9 @@ export default {
       }
     }
   },
+  mounted() {
+    localStorage.removeItem('userBasic')
+  },
   methods: {
     ...mapMutations(['setBasicInfo']),
     handleSubmit() {

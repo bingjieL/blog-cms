@@ -1,22 +1,22 @@
 <template>
     <section class="edit-wrap">
         <div class="main-header">
-            <h3 class="title"> {{isEdit? $route.name: 'Music Add'}}</h3>
+            <h3 class="title"> {{isEdit? $route.name: 'Blog Add'}}</h3>
         </div>
         <el-form class="edit-mian" :model="editForm" :rules="editRules" ref="editForm" label-width="140px" label-position="left">
-            <el-form-item label="Music Title" prop="musicTitle">
-                <el-input v-model="editForm.musicTitle"></el-input>
+            <el-form-item label="Blog Title" prop="blogTitle">
+                <el-input v-model="editForm.blogTitle"></el-input>
             </el-form-item>
-            <el-form-item label="Music Author" prop="musicAuthor">
-                <el-input v-model="editForm.musicAuthor"></el-input>
+            <el-form-item label="Blog Author" prop="blogAuthor">
+                <el-input v-model="editForm.blogAuthor"></el-input>
             </el-form-item>
-            <el-form-item label="yin Url" prop="musicUrl">
-                <el-input v-model="editForm.musicUrl"></el-input>
+            <el-form-item label="yin Url" prop="blogUrl">
+                <el-input v-model="editForm.blogUrl"></el-input>
             </el-form-item>
-            <el-form-item label="Music Lrc" prop="musicLrc">
-                <el-input v-model="editForm.musicLrc"></el-input>
+            <el-form-item label="Blog Lrc" prop="blogLrc">
+                <el-input v-model="editForm.blogLrc"></el-input>
             </el-form-item>
-            <el-form-item label="Music Pic" prop="musicPic">
+            <el-form-item label="Blog Pic" prop="blogPic">
                  <el-upload
                     class="avatar-uploader"
                     :action="$uploadUrl"
@@ -25,7 +25,7 @@
                     :on-error="handleAvatarError"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
-                        <img v-if="editForm.musicPic" :src="editForm.musicPic" class="avatar">
+                        <img v-if="editForm.blogPic" :src="editForm.blogPic" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-form-item>
@@ -37,35 +37,35 @@
     </section>
 </template>
 <script>
-import { AddApi, UpdateApi, FindByIdApi  } from '@/server/music'
+import { AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
   export default {
     data() {
       return {
         editForm: {
-          musicTitle: '',
-          musicAuthor: '',
-          musicUrl: '',
-          musicPic: '',
-          musicLrc: ''
+          blogTitle: '',
+          blogAuthor: '',
+          blogUrl: '',
+          blogPic: '',
+          blogLrc: ''
         },
         saveLoading: false,
         isEdit: false,
         _mid:null,
         editRules: {
-          musicTitle: [
-            { required: true, message: '请输入Music Title', trigger: 'blur' }
+          blogTitle: [
+            { required: true, message: '请输入Blog Title', trigger: 'blur' }
           ],
-          musicAuthor: [
-            { required: true, message: '请输入Music Author', trigger: 'blur' }
+          blogAuthor: [
+            { required: true, message: '请输入Blog Author', trigger: 'blur' }
           ],
-          musicUrl: [
-            { required: true, message: '请输入Music Url', trigger: 'blur' }
+          blogUrl: [
+            { required: true, message: '请输入Blog Url', trigger: 'blur' }
           ],
-          musicPic: [
-            { required: true, message: '请上传Music Pic', trigger: 'change' }
+          blogPic: [
+            { required: true, message: '请上传Blog Pic', trigger: 'change' }
           ],
-          musicLrc: [
-            { required: true, message: '请填写Music 歌词地址 ', trigger: 'blur' }
+          blogLrc: [
+            { required: true, message: '请填写Blog 歌词地址 ', trigger: 'blur' }
           ],
         }
       };
@@ -96,7 +96,7 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/music'
       },
       handleAvatarSuccess(res, file) {
         if(res.code=== 200){
-            this.editForm.musicPic = res.data.url
+            this.editForm.blogPic = res.data.url
         }
       },
       beforeAvatarUpload(file) {
@@ -120,7 +120,7 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/music'
                 message: res.message,
                 type: 'success'
               });
-              this.$router.push('/music/list')
+              this.$router.push('/blog/list')
             }
           })
         }else {
@@ -131,14 +131,14 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/music'
                 message: res.message,
                 type: 'success'
               });
-              this.$router.push('/music/list')
+              this.$router.push('/blog/list')
             }
           })
         }
        
       },
       getDetail(id) {
-        FindByIdApi({musicId: id}).then(res => {
+        FindByIdApi({blogId: id}).then(res => {
           if(res.code == 200) {
             this.editForm = res.data
           }

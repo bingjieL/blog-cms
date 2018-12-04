@@ -11,7 +11,7 @@
             style="width: 100%">
             <el-table-column
             prop="updatedTime"
-            label="日期"
+            label="Date"
             sortable
             width="140">
                 <template slot-scope="scope">

@@ -1,7 +1,7 @@
 <template>
     <section class="edit-wrap">
         <div class="main-header">
-            <h3 class="title"> {{$route.name}}</h3>
+            <h3 class="title"> {{isEdit? $route.name: 'Banner Add'}}</h3>
         </div>
         <el-form class="edit-mian" :model="editForm" :rules="editRules" ref="editForm" label-width="140px" label-position="left">
             <el-form-item label="Banner Title" prop="bannerTitle">

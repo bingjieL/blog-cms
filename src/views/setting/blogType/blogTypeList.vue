@@ -5,51 +5,27 @@
             <el-button type="primary" @click='goAdd'>添加</el-button>
         </div>
         <el-table
-            :data="musicListData"
+            :data="blogTypeListData"
             stripe
-            :default-sort = "{prop: 'musicId', order: 'descending'}"
+            :default-sort = "{prop: 'blogTypeId', order: 'descending'}"
             style="width: 100%">
             <el-table-column
             prop="updatedTime"
             label="Date"
-            sortable
-            width="140">
+            sortable>
                 <template slot-scope="scope">
                     <span>{{scope.row.updated_time.substring(0, 10)}}</span>
                 </template>
             </el-table-column>
             <el-table-column
-            prop="musicId"
-            label="musicId"
-            sortable
-            width="120">
-            </el-table-column>
-            <el-table-column
-            prop="musicTitle"
-            label="musicTitle"
+            prop="blogTypeId"
+            label="blogTypeId"
             sortable>
             </el-table-column>
             <el-table-column
-            prop="musicAuthor"
-            label="musicAuthor"
+            prop="blogTypeTitle"
+            label="blogTypeTitle"
             sortable>
-            </el-table-column>
-            <el-table-column
-            prop="musicUrl"
-            label="musicUrl"
-            sortable>
-            </el-table-column>
-             <el-table-column
-            prop="musicLrc"
-            label="musicLrc"
-            sortable>
-            </el-table-column>
-            <el-table-column
-            prop="musicPic"
-            label="图片地址">
-                <template slot-scope="scope">
-                    <a style="color: #2593FC;" :href="scope.row.musicPic" target="_blank" rel="noopener noreferrer">{{scope.row.musicPic}}</a>
-                </template>
             </el-table-column>
             <el-table-column
             label="操作">
@@ -63,35 +39,34 @@
 </template>
 
 <script>
-import { GetApi, DeleteApi } from '@/server/music'
+import { GetApi, DeleteApi } from '@/server/blogType'
 export default {
     data () {
         return {
-            musicListData: [],
+            blogTypeListData: [],
             count: 0,
-            pageSize: 0,
         }   
     },
     methods: {
         goAdd(){
-            this.$router.push('/music/edit')
+            this.$router.push('/setting/blogTypeEdit')
         },
         goEdit(rowDetail) {
-          let _id =   rowDetail.musicId
-          this.$router.push({path: '/music/edit', query:{_mid: _id}})
+          let _id =   rowDetail.blogTypeId
+          this.$router.push({path: '/setting/blogTypeEdit', query:{_bid: _id}})
         },
         getList(params) {
             GetApi(params).then(res => {
                 if(res.code == 200) {
-                    this.musicListData = res.data.rows
+                    this.blogTypeListData = res.data.rows
                     this.count = res.data.count
                 }
             })
         },
         deleteBaner(rowDetail) {
-            let _id =   rowDetail.musicId
+            let _id =   rowDetail.blogTypeId
             let params = {
-                musicId: _id
+                blogTypeId: _id
             }
             this.$confirm('点击确认将删除此条数据, 是否继续?', '提示', {
             confirmButtonText: '确定',
