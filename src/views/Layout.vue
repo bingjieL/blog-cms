@@ -2,7 +2,7 @@
   <el-container class="main-layout">
     <el-aside class="main-layout-nav" :width="nav.width">
       <div class="logo"><h1>{{nav.collapsed ? 'Jay' : 'Jay Blog'}}</h1></div>
-      <el-menu :collapse="nav.collapsed" :default-active="$route.path"
+      <el-menu :collapse="nav.collapsed" :default-active="defaultPath"
         unique-opened router class="menu">
        <template v-for="(item, index) in navList" v-if="!item.hidden">
           <el-menu-item v-if="item.children.length == 1" :index="item.children[0].path" :key="index">
@@ -54,6 +54,7 @@ import { mapState, mapMutations} from 'vuex'
 export default {
   data () {
     return {
+      defaultPath: '',
       navList: [
         {
           path: '/banner',
@@ -88,7 +89,7 @@ export default {
           name: 'Setting',
           icon: 'iconfont icon-mzicon-setting',
           children: [
-            { path: '/setting/blogTypeList', name: 'BlogType list', title: 'BlogType List'},
+            { path: '/setting/blogTypeList', name: 'BlogType', title: 'BlogType'},
             { hidden: true }
           ]
         },
@@ -97,6 +98,11 @@ export default {
         width: '250px',
         collapsed: false
       },
+    }
+  },
+  watch: {
+    '$route.path': function(value){
+      this.changeDefaultPath(value.split('/'))
     }
   },
   computed: {
@@ -112,12 +118,26 @@ export default {
     let _userBasic = window.localStorage.getItem('userBasic')
     let userBasic =_userBasic? JSON.parse(_userBasic): {}
     this.setBasicInfo(userBasic)
+    this.changeDefaultPath(this.$route.path.split('/'))
   },
   methods: {
     ...mapMutations(['setBasicInfo']),
     collapse() {
       this.nav.collapsed = !this.nav.collapsed
       this.nav.width = this.nav.collapsed ? '64px' : '250px'
+    },
+    changeDefaultPath(routerArr) {
+      let defaultPath = ''
+      if(routerArr.includes('banner')){
+        defaultPath = '/banner/list'
+      }else if(routerArr.includes('music')){
+        defaultPath = '/music/list'
+      }else if(routerArr.includes('blog')){
+        defaultPath = '/blog/list'
+      }else if(routerArr.includes('blogTypeList') || routerArr.includes('blogTypeEdit')){
+        defaultPath = '/setting/blogTypeList'
+      }
+      this.defaultPath = defaultPath
     },
     handleLogout() {
       this.$confirm('用户将退出登录,您确退出登录?', '退出登录', {

@@ -30,26 +30,26 @@
             sortable>
             </el-table-column>
             <el-table-column
-            prop="blogAuthor"
-            label="blogAuthor"
+            label="blogType"
             sortable>
-            </el-table-column>
-            <el-table-column
-            prop="blogUrl"
-            label="blogUrl"
-            sortable>
-            </el-table-column>
-             <el-table-column
-            prop="blogLrc"
-            label="blogLrc"
-            sortable>
-            </el-table-column>
-            <el-table-column
-            prop="blogPic"
-            label="图片地址">
                 <template slot-scope="scope">
-                    <a style="color: #2593FC;" :href="scope.row.blogPic" target="_blank" rel="noopener noreferrer">{{scope.row.blogPic}}</a>
+                    <span style="color: #2593FC;">{{scope.row.blog_type?scope.row.blog_type.blogTypeTitle:'No Select'}}</span>
                 </template>
+            </el-table-column>
+            <el-table-column
+            prop="blogHot"
+            label="blogHot"
+            sortable>
+            </el-table-column>
+            <el-table-column
+            prop="blogLikes"
+            label="blogLikes"
+            sortable>
+            </el-table-column>
+            <el-table-column
+            prop="blogDes"
+            label="blogDes"
+            sortable>
             </el-table-column>
             <el-table-column
             label="操作">
@@ -59,6 +59,16 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div class="pagenation">
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="form.pageNumber"
+                :page-size="form.pageSize"
+                layout="prev, pager, next, jumper"
+                :total="count">
+            </el-pagination>
+        </div>
     </section>
 </template>
 
@@ -69,10 +79,20 @@ export default {
         return {
             blogListData: [],
             count: 0,
-            pageSize: 0,
+            form: {
+                pageNumber: 0,
+                pageSize: 10,
+            }
         }   
     },
     methods: {
+        handleSizeChange(val) {
+
+        },
+        handleCurrentChange(val) {
+            this.form.pageNumber = val
+            this.getList(this.form)
+        },
         goAdd(){
             this.$router.push('/blog/edit')
         },
@@ -82,6 +102,7 @@ export default {
         },
         getList(params) {
             GetApi(params).then(res => {
+                // console.log('---> res blog list', res)
                 if(res.code == 200) {
                     this.blogListData = res.data.rows
                     this.count = res.data.count
@@ -104,7 +125,7 @@ export default {
                             message: res.message,
                             type: 'success'
                         });
-                        this.getList({})
+                        this.getList(this.form)
                    }
                })
             }).catch(() => {
@@ -113,7 +134,7 @@ export default {
         }
     },
     mounted() {
-        this.getList({})
+        this.getList(this.form)
     }
 }
 </script>
@@ -127,6 +148,10 @@ export default {
         }
         .el-icon-delete{
             color: #f56c6c;
+        }
+        .pagenation{
+            text-align: right;
+            padding: 40px 10px;
         }
     }
 </style>

@@ -1,6 +1,8 @@
 .edit-wrap{
     .edit-mian{
         padding: 20px 5px;
-        width: 500px;
+        .el-input__inner{
+            width: 300px;
+        }
     }
 }

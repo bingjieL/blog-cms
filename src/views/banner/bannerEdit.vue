@@ -5,7 +5,7 @@
         </div>
         <el-form class="edit-mian" :model="editForm" :rules="editRules" ref="editForm" label-width="140px" label-position="left">
             <el-form-item label="Banner Title" prop="bannerTitle">
-                <el-input v-model="editForm.bannerTitle"></el-input>
+                <el-input v-model="editForm.bannerTitle" placeholder="请输入Banner Title"></el-input>
             </el-form-item>
             <el-form-item label="Banner Image" prop="bannerImg">
                  <el-upload
@@ -137,28 +137,32 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/banner'
   }
 </script>
 <style lang="scss">
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+.edit-wrap{
+    .avatar-uploader{
+        .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            &:hover{
+                    border-color: #409EFF;
+            }
+            .avatar-uploader-icon {
+                font-size: 28px;
+                color: #8c939d;
+                width: 300px;
+                height: 150px;
+                line-height: 150px;
+                text-align: center;
+            }
+            .avatar {
+                width: 300px;
+                height: 150px;
+                display: block;
+            }
+        }
+    }
+}
 @import '@/assets/style/banner/bannerEdit.scss';
 </style>

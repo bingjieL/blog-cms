@@ -5,7 +5,7 @@
         </div>
         <el-form class="edit-mian" :model="editForm" :rules="editRules" ref="editForm" label-width="140px" label-position="left">
             <el-form-item label="BlogType Title" prop="blogTypeTitle">
-                <el-input v-model="editForm.blogTypeTitle"></el-input>
+                <el-input v-model="editForm.blogTypeTitle" placeholder="请输入BlogType Title"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" :loading="saveLoading" @click="submitForm('editForm')">立即创建</el-button>

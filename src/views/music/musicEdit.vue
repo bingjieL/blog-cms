@@ -5,16 +5,16 @@
         </div>
         <el-form class="edit-mian" :model="editForm" :rules="editRules" ref="editForm" label-width="140px" label-position="left">
             <el-form-item label="Music Title" prop="musicTitle">
-                <el-input v-model="editForm.musicTitle"></el-input>
+                <el-input v-model="editForm.musicTitle" placeholder="请输入Music Title"></el-input>
             </el-form-item>
             <el-form-item label="Music Author" prop="musicAuthor">
-                <el-input v-model="editForm.musicAuthor"></el-input>
+                <el-input v-model="editForm.musicAuthor" placeholder="请输入Music Author"></el-input>
             </el-form-item>
-            <el-form-item label="yin Url" prop="musicUrl">
-                <el-input v-model="editForm.musicUrl"></el-input>
+            <el-form-item label="Music Url" prop="musicUrl">
+                <el-input v-model="editForm.musicUrl"  placeholder="请输入Music Url"></el-input>
             </el-form-item>
             <el-form-item label="Music Lrc" prop="musicLrc">
-                <el-input v-model="editForm.musicLrc"></el-input>
+                <el-input v-model="editForm.musicLrc" placeholder="请输入Music Lrc"></el-input>
             </el-form-item>
             <el-form-item label="Music Pic" prop="musicPic">
                  <el-upload
@@ -158,28 +158,32 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/music'
   }
 </script>
 <style lang="scss">
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+.edit-wrap{
+    .avatar-uploader{
+        .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            &:hover{
+                    border-color: #409EFF;
+            }
+            .avatar-uploader-icon {
+                font-size: 28px;
+                color: #8c939d;
+                width: 300px;
+                height: 150px;
+                line-height: 150px;
+                text-align: center;
+            }
+            .avatar {
+                width: 300px;
+                height: 150px;
+                display: block;
+            }
+        }
+    }
+}
 @import '@/assets/style/banner/bannerEdit.scss';
 </style>

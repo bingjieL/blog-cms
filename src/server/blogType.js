@@ -20,3 +20,4 @@ export const FindByIdApi = (params) => {
 export const DeleteApi = (params) => {
     return request.post(`${hostUrl}/api/blogType/delete`, params)
 }
+

@@ -5,18 +5,22 @@
         </div>
         <el-form class="edit-mian" :model="editForm" :rules="editRules" ref="editForm" label-width="140px" label-position="left">
             <el-form-item label="Blog Title" prop="blogTitle">
-                <el-input v-model="editForm.blogTitle"></el-input>
+                <el-input v-model="editForm.blogTitle" placeholder="请输入Blog Title"></el-input>
             </el-form-item>
-            <el-form-item label="Blog Author" prop="blogAuthor">
-                <el-input v-model="editForm.blogAuthor"></el-input>
+            <el-form-item label="Blog Des" prop="blogDes">
+                <el-input v-model="editForm.blogDes" placeholder="请输入Blog Des"></el-input>
             </el-form-item>
-            <el-form-item label="yin Url" prop="blogUrl">
-                <el-input v-model="editForm.blogUrl"></el-input>
+             <el-form-item label="Blog Type" prop="blog_type_id">
+                  <el-select v-model="editForm.blog_type_id" placeholder="请选择文章类型">
+                        <el-option
+                            v-for="item in blogTypeData"
+                            :key="item.value"
+                            :label="item.blogTypeTitle"
+                            :value="item.blogTypeId">
+                        </el-option>
+                    </el-select>
             </el-form-item>
-            <el-form-item label="Blog Lrc" prop="blogLrc">
-                <el-input v-model="editForm.blogLrc"></el-input>
-            </el-form-item>
-            <el-form-item label="Blog Pic" prop="blogPic">
+             <el-form-item label="Blog Image" prop="blogImg">
                  <el-upload
                     class="avatar-uploader"
                     :action="$uploadUrl"
@@ -25,9 +29,20 @@
                     :on-error="handleAvatarError"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
-                        <img v-if="editForm.blogPic" :src="editForm.blogPic" class="avatar">
+                        <img v-if="editForm.blogImg" :src="editForm.blogImg" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
+            </el-form-item>
+            <el-form-item label="Blog Content" prop="blogContent">
+                 <div class="quill">
+                    <quill-editor 
+                        v-model="editForm.blogContent" 
+                        ref="myQuillEditor" 
+                        :options="editorOption" 
+                        @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
+                        @change="onEditorChange($event)">
+                    </quill-editor>
+                </div>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" :loading="saveLoading" @click="submitForm('editForm')">立即创建</el-button>
@@ -37,16 +52,16 @@
     </section>
 </template>
 <script>
-import { AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
+import {GetBlogTypeApi, AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
   export default {
     data() {
       return {
         editForm: {
-          blogTitle: '',
-          blogAuthor: '',
-          blogUrl: '',
-          blogPic: '',
-          blogLrc: ''
+            blogTitle: '',
+            blogDes: '',
+            blogContent: '',
+            blog_type_id: '',
+            blogImg: ''
         },
         saveLoading: false,
         isEdit: false,
@@ -55,98 +70,125 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
           blogTitle: [
             { required: true, message: '请输入Blog Title', trigger: 'blur' }
           ],
-          blogAuthor: [
-            { required: true, message: '请输入Blog Author', trigger: 'blur' }
+          blogDes: [
+            { required: true, message: '请输入Blog Des', trigger: 'blur' }
           ],
-          blogUrl: [
-            { required: true, message: '请输入Blog Url', trigger: 'blur' }
+          blogImg: [
+            { required: true, message: '请上传Blog Image', trigger: 'blur' }
           ],
-          blogPic: [
-            { required: true, message: '请上传Blog Pic', trigger: 'change' }
+          blogContent: [
+            { required: true, message: '请输入Blog Content', trigger: 'blur' }
           ],
-          blogLrc: [
-            { required: true, message: '请填写Blog 歌词地址 ', trigger: 'blur' }
-          ],
-        }
+          blog_type_id: [
+            { required: true, message: '请选择Blog Type', trigger: 'change' }
+          ]
+        },
+        editorOption:{
+            placeholder: '请输入blog内容',
+            theme: 'snow'
+        },
+        blogTypeData:[]
       };
     },
     methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.save()
-          } else {
-            return false;
-          } 
-        });
-      },
-      resetForm(formName) {
-        this.$confirm('点击确认将重置已填写数据, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$refs[formName].resetFields();
-        }).catch(() => {
-                   
-        });
-      },
-      handleAvatarError(err, file, fileList) {
-          console.log('---> err', err)
-      },
-      handleAvatarSuccess(res, file) {
-        if(res.code=== 200){
-            this.editForm.blogPic = res.data.url
-        }
-      },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg' || 'image/png';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
-      },
-      save() {
-        this.saveLoading = true
-        if(this.isEdit) {
-          UpdateApi(this.editForm).then(res => {
-            this.saveLoading = false
-            if(res.code == 200){
-              this.$message({
-                message: res.message,
-                type: 'success'
-              });
-              this.$router.push('/blog/list')
+        onEditorReady(editor) { // 准备编辑器
+
+        },
+        onEditorBlur(){}, // 失去焦点事件
+        onEditorFocus(){}, // 获得焦点事件
+        onEditorChange(){}, // 内容改变事件
+        // 转码
+        escapeStringHTML(str) {
+            str = str.replace(/&lt;/g,'<');
+            str = str.replace(/&gt;/g,'>');
+            return str;
+        },
+
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+            if (valid) {
+                this.save()
+            } else {
+                return false;
+            } 
+            });
+        },
+        resetForm(formName) {
+            this.$confirm('点击确认将重置已填写数据, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).then(() => {
+            this.$refs[formName].resetFields();
+            }).catch(() => {
+                    
+            });
+        },
+        save() {
+            this.saveLoading = true
+            if(this.isEdit) {
+            UpdateApi(this.editForm).then(res => {
+                this.saveLoading = false
+                if(res.code == 200){
+                this.$message({
+                    message: res.message,
+                    type: 'success'
+                });
+                this.$router.push('/blog/list')
+                }
+            })
+            }else {
+            AddApi(this.editForm).then(res => {
+                this.saveLoading = false
+                if(res.code == 200){
+                this.$message({
+                    message: res.message,
+                    type: 'success'
+                });
+                this.$router.push('/blog/list')
+                }
+            })
             }
-          })
-        }else {
-          AddApi(this.editForm).then(res => {
-            this.saveLoading = false
-            if(res.code == 200){
-              this.$message({
-                message: res.message,
-                type: 'success'
-              });
-              this.$router.push('/blog/list')
+        
+        },
+        handleAvatarError(err, file, fileList) {
+            console.log('---> err', err)
+        },
+        handleAvatarSuccess(res, file) {
+            if(res.code=== 200){
+                this.editForm.blogImg = res.data.url
             }
-          })
+        },
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg' || 'image/png';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isJPG) {
+            this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+            this.$message.error('上传图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
+        getBlogType() {
+            GetBlogTypeApi().then(res => {
+                console.log('---> blogtypeData',res)
+                if(res.code == 200){
+                    this.blogTypeData = res.data.rows
+                }
+            })
+        },
+        getDetail(id) {
+            FindByIdApi({blogId: id}).then(res => {
+                if(res.code == 200) {
+                    this.editForm = res.data
+                }
+            })
         }
-       
-      },
-      getDetail(id) {
-        FindByIdApi({blogId: id}).then(res => {
-          if(res.code == 200) {
-            this.editForm = res.data
-          }
-        })
-      }
     },
     mounted() {
-       let {_mid} = this.$route.query
+        this.getBlogType()
+        let {_mid} = this.$route.query
         if(_mid){
             this.isEdit = true
             this._mid = _mid
@@ -158,28 +200,42 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
   }
 </script>
 <style lang="scss">
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+.edit-wrap{
+    .quill{
+        width: 80%;
+        min-height: 400px;
+        margin-bottom: 40px;  
+        .quill-editor{
+            .ql-editor{
+                min-height: 400px;
+            }   
+        }
+    }
+    .avatar-uploader{
+        .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            &:hover{
+                    border-color: #409EFF;
+            }
+            .avatar-uploader-icon {
+                font-size: 28px;
+                color: #8c939d;
+                width: 300px;
+                height: 150px;
+                line-height: 150px;
+                text-align: center;
+            }
+            .avatar {
+                width: 300px;
+                height: 150px;
+                display: block;
+            }
+        }
+    }
+}
 @import '@/assets/style/banner/bannerEdit.scss';
 </style>
