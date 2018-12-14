@@ -7,9 +7,7 @@
             <el-form-item label="Blog Title" prop="blogTitle">
                 <el-input v-model="editForm.blogTitle" placeholder="请输入Blog Title"></el-input>
             </el-form-item>
-            <el-form-item label="Blog Des" prop="blogDes">
-                <el-input v-model="editForm.blogDes" placeholder="请输入Blog Des"></el-input>
-            </el-form-item>
+            
              <el-form-item label="Blog Type" prop="blog_type_id">
                   <el-select v-model="editForm.blog_type_id" placeholder="请选择文章类型">
                         <el-option
@@ -32,6 +30,9 @@
                         <img v-if="editForm.blogImg" :src="editForm.blogImg" class="avatar">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
+            </el-form-item>
+            <el-form-item label="Blog Des" prop="blogDes">
+                <el-input style="width: 80%;" type="textarea" :rows="3" v-model="editForm.blogDes" placeholder="请输入Blog Des"></el-input>
             </el-form-item>
             <el-form-item label="Blog Content" prop="blogContent">
                  <div class="quill">
@@ -127,27 +128,31 @@ import {GetBlogTypeApi, AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
         save() {
             this.saveLoading = true
             if(this.isEdit) {
-            UpdateApi(this.editForm).then(res => {
-                this.saveLoading = false
-                if(res.code == 200){
-                this.$message({
-                    message: res.message,
-                    type: 'success'
-                });
-                this.$router.push('/blog/list')
-                }
-            })
+                UpdateApi(this.editForm).then(res => {
+                    this.saveLoading = false
+                    if(res.code == 200){
+                    this.$message({
+                        message: res.message,
+                        type: 'success'
+                    });
+                    this.$router.push('/blog/list')
+                    }
+                }).catch(err => {
+                    this.saveLoading = false
+                })
             }else {
-            AddApi(this.editForm).then(res => {
-                this.saveLoading = false
-                if(res.code == 200){
-                this.$message({
-                    message: res.message,
-                    type: 'success'
-                });
-                this.$router.push('/blog/list')
-                }
-            })
+                AddApi(this.editForm).then(res => {
+                    this.saveLoading = false
+                    if(res.code == 200){
+                    this.$message({
+                        message: res.message,
+                        type: 'success'
+                    });
+                    this.$router.push('/blog/list')
+                    }
+                }).catch(err => {
+                    this.saveLoading = false
+                })
             }
         
         },
@@ -172,7 +177,6 @@ import {GetBlogTypeApi, AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
         },
         getBlogType() {
             GetBlogTypeApi().then(res => {
-                console.log('---> blogtypeData',res)
                 if(res.code == 200){
                     this.blogTypeData = res.data.rows
                 }
