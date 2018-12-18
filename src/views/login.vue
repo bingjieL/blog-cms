@@ -58,7 +58,6 @@ export default {
           this.loginLoading = true
           this.loginLoading = false
           LoginApi(this.form).then(res => {
-            console.log('----> res', res)
             if(res.code === 200) {
               let { userName } =  res.data
               let redirect = this.$route.query.redirect

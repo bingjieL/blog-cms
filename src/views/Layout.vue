@@ -114,7 +114,7 @@ export default {
     })
   },
   created() {
-    // this.navList = this.$router.options.routes
+    this.navList = this.$router.options.routes
     let _userBasic = window.localStorage.getItem('userBasic')
     let userBasic =_userBasic? JSON.parse(_userBasic): {}
     this.setBasicInfo(userBasic)
@@ -134,6 +134,8 @@ export default {
         defaultPath = '/music/list'
       }else if(routerArr.includes('blog')){
         defaultPath = '/blog/list'
+      }else if(routerArr.includes('hotSwiper')){
+        defaultPath = '/hotSwiper/list'
       }else if(routerArr.includes('blogTypeList') || routerArr.includes('blogTypeEdit')){
         defaultPath = '/setting/blogTypeList'
       }

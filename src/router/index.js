@@ -54,6 +54,18 @@ export default new Router({
       ]
     },
     {
+      path: '/hotSwiper',
+      title: 'HotSwiper',
+      name: 'HotSwiper',
+      icon: 'iconfont icon-gongzuojingli',
+      component: Layout,
+      redirect: '/hotSwiper/list',
+      children: [
+        { path: '/hotSwiper/list', name: 'HotSwiper list', title: 'HotSwiper List', component: () => import('@/views/hotSwiper/hotSwiperList.vue') },
+        { path: '/hotSwiper/edit', name: 'HotSwiper edit', hidden: true, title: 'HotSwiper Edit', component: () => import('@/views/hotSwiper/hotSwiperEdit.vue') },
+      ]
+    },
+    {
       path: '/setting',
       title: 'Setting',
       name: 'Setting',
