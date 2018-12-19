@@ -7,7 +7,6 @@
             <el-form-item label="Blog Title" prop="blogTitle">
                 <el-input v-model="editForm.blogTitle" placeholder="请输入Blog Title"></el-input>
             </el-form-item>
-            
              <el-form-item label="Blog Type" prop="blog_type_id">
                   <el-select v-model="editForm.blog_type_id" placeholder="请选择文章类型">
                         <el-option

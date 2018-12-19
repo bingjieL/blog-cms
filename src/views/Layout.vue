@@ -121,7 +121,7 @@ export default {
     this.changeDefaultPath(this.$route.path.split('/'))
   },
   methods: {
-    ...mapMutations(['setBasicInfo']),
+    ...mapMutations(['setBasicInfo', 'clearBasicInfo']),
     collapse() {
       this.nav.collapsed = !this.nav.collapsed
       this.nav.width = this.nav.collapsed ? '64px' : '250px'
@@ -134,6 +134,8 @@ export default {
         defaultPath = '/music/list'
       }else if(routerArr.includes('blog')){
         defaultPath = '/blog/list'
+      }else if(routerArr.includes('musicSheet')){
+        defaultPath = '/musicSheet/list'
       }else if(routerArr.includes('hotSwiper')){
         defaultPath = '/hotSwiper/list'
       }else if(routerArr.includes('blogTypeList') || routerArr.includes('blogTypeEdit')){
@@ -147,7 +149,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          console.log('----> 用户退出登录')
+          this.clearBasicInfo()
           this.$router.push('/login')
         })
     }

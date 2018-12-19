@@ -66,6 +66,18 @@ export default new Router({
       ]
     },
     {
+      path: '/sheet',
+      title: 'MusicSheet',
+      name: 'MusicSheet',
+      icon: 'iconfont icon-yinle1',
+      component: Layout,
+      redirect: '/musicSheet/list',
+      children: [
+        { path: '/musicSheet/list', name: 'musicSheet list', title: 'musicSheet List', component: () => import('@/views/musicSheet/musicSheetList.vue') },
+        { path: '/musicSheet/edit', name: 'musicSheet edit', hidden: true, title: 'musicSheet Edit', component: () => import('@/views/musicSheet/musicSheetEdit.vue') },
+      ]
+    },
+    {
       path: '/setting',
       title: 'Setting',
       name: 'Setting',
