@@ -13,13 +13,11 @@
             <el-form-item label="MusicSheet Url" prop="sheetUrl">
                 <el-input v-model="editForm.sheetUrl"  placeholder="请输入MusicSheet Url"></el-input>
             </el-form-item>
-           
-           
             <el-form-item label="MusicSheet Logo" prop="sheetImg">
                  <el-upload
                     class="avatar-uploader"
                     :action="$uploadUrl"
-                    nam="file"
+                    name="file"
                     :show-file-list="false"
                     :on-error="handleAvatarError"
                     :on-success="handleAvatarSuccess"
