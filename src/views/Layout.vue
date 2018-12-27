@@ -138,6 +138,8 @@ export default {
         defaultPath = '/musicSheet/list'
       }else if(routerArr.includes('hotSwiper')){
         defaultPath = '/hotSwiper/list'
+      }else if(routerArr.includes('book')){
+        defaultPath = '/book/list'
       }else if(routerArr.includes('blogTypeList') || routerArr.includes('blogTypeEdit')){
         defaultPath = '/setting/blogTypeList'
       }

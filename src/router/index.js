@@ -30,6 +30,18 @@ export default new Router({
       ]
     },
     {
+      path: '/blog',
+      title: 'Blog',
+      name: 'Blog',
+      icon: 'iconfont icon-huanyingqiapian',
+      component: Layout,
+      redirect: '/blog/list',
+      children: [
+        { path: '/blog/list', name: 'Blog list', title: 'Blog List', component: () => import('@/views/blog/blogList.vue') },
+        { path: '/blog/edit', name: 'Blog edit', hidden: true, title: 'Blog Edit', component: () => import('@/views/blog/blogEdit.vue') },
+      ]
+    },
+    {
       path: '/music',
       title: 'Music',
       name: 'Music',
@@ -42,15 +54,15 @@ export default new Router({
       ]
     },
     {
-      path: '/blog',
-      title: 'Blog',
-      name: 'Blog',
-      icon: 'iconfont icon-huanyingqiapian',
+      path: '/book',
+      title: 'Book',
+      name: 'Book',
+      icon: 'iconfont icon-shudan',
       component: Layout,
-      redirect: '/blog/list',
+      redirect: '/book/list',
       children: [
-        { path: '/blog/list', name: 'Blog list', title: 'Blog List', component: () => import('@/views/blog/blogList.vue') },
-        { path: '/blog/edit', name: 'Blog edit', hidden: true, title: 'Blog Edit', component: () => import('@/views/blog/blogEdit.vue') },
+        { path: '/book/list', name: 'Book list', title: 'Book List', component: () => import('@/views/book/bookList.vue') },
+        { path: '/book/edit', name: 'Book edit', hidden: true, title: 'Book Edit', component: () => import('@/views/book/bookEdit.vue') },
       ]
     },
     {
