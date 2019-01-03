@@ -35,13 +35,14 @@
             </el-form-item>
             <el-form-item label="Blog Content" prop="blogContent">
                  <div class="quill">
-                    <quill-editor 
+                    <!-- <quill-editor 
                         v-model="editForm.blogContent" 
                         ref="myQuillEditor" 
                         :options="editorOption" 
                         @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
                         @change="onEditorChange($event)">
-                    </quill-editor>
+                    </quill-editor> -->
+                     <WangEdit :catchData="catchData" :defaultContent="defaultContent"></WangEdit>
                 </div>
             </el-form-item>
             <el-form-item>
@@ -49,11 +50,17 @@
                 <el-button @click="resetForm('editForm')">取消</el-button>
             </el-form-item>
         </el-form>
+       
     </section>
 </template>
 <script>
 import {GetBlogTypeApi, AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
+import WangEdit from '../../commponents/wangedit'
+// catchData
   export default {
+    components: {
+        WangEdit
+    },
     data() {
       return {
         editForm: {
@@ -63,6 +70,7 @@ import {GetBlogTypeApi, AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
             blog_type_id: '',
             blogImg: ''
         },
+        defaultContent: '',
         saveLoading: false,
         isEdit: false,
         _mid:null,
@@ -91,12 +99,19 @@ import {GetBlogTypeApi, AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
       };
     },
     methods: {
+        catchData(html) {
+            // console.log('----> html', html)
+            this.editForm.blogContent = html
+        },
         onEditorReady(editor) { // 准备编辑器
 
         },
         onEditorBlur(){}, // 失去焦点事件
         onEditorFocus(){}, // 获得焦点事件
-        onEditorChange(){}, // 内容改变事件
+        onEditorChange(val){
+            
+            // val.replace(/\s/g,'')
+        }, // 内容改变事件
         // 转码
         escapeStringHTML(str) {
             str = str.replace(/&lt;/g,'<');
@@ -185,6 +200,7 @@ import {GetBlogTypeApi, AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
             FindByIdApi({blogId: id}).then(res => {
                 if(res.code == 200) {
                     this.editForm = res.data
+                    this.defaultContent = this.editForm.blogContent
                 }
             })
         }
@@ -203,15 +219,25 @@ import {GetBlogTypeApi, AddApi, UpdateApi, FindByIdApi  } from '@/server/blog'
   }
 </script>
 <style lang="scss">
+.ql-editor {
+    white-space: normal!important;
+}
 .edit-wrap{
     .quill{
         width: 80%;
-        min-height: 400px;
+        min-height:400px;
         margin-bottom: 40px;  
         .quill-editor{
             .ql-editor{
-                min-height: 400px;
+                min-height: 500px;
             }   
+        }
+        .w-e-text-container{
+             min-height: 400px!important;
+             height: auto!important;
+             .w-e-text{
+                 overflow-y:visible;
+             }
         }
     }
     .avatar-uploader{
