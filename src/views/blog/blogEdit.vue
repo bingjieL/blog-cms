@@ -225,7 +225,7 @@ import WangEdit from '../../commponents/wangedit'
 .edit-wrap{
     .quill{
         width: 80%;
-        min-height:400px;
+        
         margin-bottom: 40px;  
         .quill-editor{
             .ql-editor{
@@ -233,8 +233,8 @@ import WangEdit from '../../commponents/wangedit'
             }   
         }
         .w-e-text-container{
-             min-height: 400px!important;
-             height: auto!important;
+             height: 400px!important;
+             overflow-y: auto; 
              .w-e-text{
                  overflow-y:visible;
              }
