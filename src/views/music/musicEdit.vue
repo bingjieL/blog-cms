@@ -10,8 +10,19 @@
             <el-form-item label="Music Author" prop="musicAuthor">
                 <el-input v-model="editForm.musicAuthor" placeholder="请输入Music Author"></el-input>
             </el-form-item>
-            <el-form-item label="Music Url" prop="musicUrl">
-                <el-input v-model="editForm.musicUrl"  placeholder="请输入Music Url"></el-input>
+            <el-form-item label="Music Mp3" prop="musicUrl" style="width: 400px;">
+                <el-upload
+                  class="upload-demo"
+                  :action="$uploadMp3Url"
+                  :on-error="handleAvatarErrorMp3"
+                  :on-success="handleAvatarSuccessMp3"
+                  :before-upload="beforeAvatarUploadMp3"
+                  :on-remove="fileListDelete"
+                  :limit="1"
+                  :file-list="fileList">
+                  <el-button size="small" type="primary">点击上传</el-button>
+                  <div slot="tip" class="el-upload__tip">只能上传Mp3文件，且不超过10Mb</div>
+                </el-upload>
             </el-form-item>
             <el-form-item label="Music Lrc" prop="musicLrc">
                 <el-input v-model="editForm.musicLrc" placeholder="请输入Music Lrc"></el-input>
@@ -48,8 +59,10 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/music'
           musicPic: '',
           musicLrc: ''
         },
+        mp3Name: '',
         saveLoading: false,
         isEdit: false,
+        fileList: [],
         _mid:null,
         editRules: {
           musicTitle: [
@@ -59,7 +72,7 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/music'
             { required: true, message: '请输入Music Author', trigger: 'blur' }
           ],
           musicUrl: [
-            { required: true, message: '请输入Music Url', trigger: 'blur' }
+            { required: true, message: '请上传MP3', trigger: 'blur' }
           ],
           musicPic: [
             { required: true, message: '请上传Music Pic', trigger: 'change' }
@@ -94,19 +107,46 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/music'
       handleAvatarError(err, file, fileList) {
           console.log('---> err', err)
       },
+      handleAvatarErrorMp3(err, file, fileList) {
+          console.log('---> err', err)
+      },
       handleAvatarSuccess(res, file) {
         if(res.code=== 200){
             this.editForm.musicPic = res.data.url
         }
       },
+      handleAvatarSuccessMp3(res, file) {
+        if(res.code=== 200){
+            this.editForm.musicUrl = res.data.url
+            this.fileList = [{
+              url: res.data.url,
+              name: this.mp3Name
+            }]
+        }
+      },
+      fileListDelete(file, fileList) {
+        this.editForm.musicUrl = ''
+      },
+      beforeAvatarUploadMp3(file) {
+        const isMp3 = file.type === 'audio/mp3';
+        const isLt10M = file.size / 1024 / 1024 < 10;
+        this.mp3Name = file.name
+        if (!isMp3) {
+          this.$message.error('上传音乐只能是 Mp3 格式!');
+        }
+        if (!isLt10M) {
+          this.$message.error('上传的Mp3不能超过 10MB!');
+        }
+        return isMp3 && isLt10M;
+      },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg' || 'image/png';
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
+        this.$message.error('上传头像图片只能是 JPG 格式!');
         }
         if (!isLt2M) {
-          this.$message.error('上传图片大小不能超过 2MB!');
+        this.$message.error('上传图片大小不能超过 2MB!');
         }
         return isJPG && isLt2M;
       },
@@ -141,6 +181,9 @@ import { AddApi, UpdateApi, FindByIdApi  } from '@/server/music'
         FindByIdApi({musicId: id}).then(res => {
           if(res.code == 200) {
             this.editForm = res.data
+            this.fileList = [{
+              name: `${res.data.musicTitle}.mp3`
+            }]
           }
         })
       }

@@ -4,7 +4,11 @@ const CommonMixins = {
     computed: {
         $uploadUrl() {
             return `${hostUrl}/api/upFiles`
+        },
+        $uploadMp3Url() {
+            return `${hostUrl}/api/upFilesMP3`
         }
+
     }
 }
 

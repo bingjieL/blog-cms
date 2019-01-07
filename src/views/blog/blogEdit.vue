@@ -234,9 +234,8 @@ import WangEdit from '../../commponents/wangedit'
         }
         .w-e-text-container{
              height: 400px!important;
-             overflow-y: auto; 
              .w-e-text{
-                 overflow-y:visible;
+                 overflow-y:auto;
              }
         }
     }
