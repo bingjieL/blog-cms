@@ -81,7 +81,7 @@ export default {
             count: 0,
             form: {
                 pageNumber: 0,
-                pageSize: 10,
+                pageSize: 5,
             }
         }   
     },
